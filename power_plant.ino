@@ -11,8 +11,9 @@ int lightSound = 6;
 int lightLED = 10;
 int sensorMin = 0;
 int sensorMax = 0;
+
 void setup() {
-  // initialize serial communication at 9600 bits per second:
+  // Initialize pins and serial communication.
   pinMode(waterLED, OUTPUT);
   pinMode(lightLED, OUTPUT);
   pinMode(waterSound, OUTPUT);
@@ -21,39 +22,39 @@ void setup() {
 }
 
 void loop() {
-  // read the input on analog pin 0 to get the voltage from the soil moisture sensor.
+  // Check pins against threshold values and send power to LEDs and speakers accordingly.
   
  ///////////////////////////////////////////////////////////////////////////////////////////////////////// SOIL MOISTURE //////////////////////////////////////////////////////////////////////////////////////////
  int moistureRead = analogRead(soilPin);
-///// DEBUG FUNCTIONS ////////
- //Serial.println("The moisture sensor reading is: ");
- //Serial.println(moistureRead);
+ ///// DEBUG FUNCTIONS ////////
+ // Serial.println("The moisture sensor reading is: ");
+ // Serial.println(moistureRead);
  
- //Only take the valid values
+ // Only take the valid values.
   if (moistureRead < 900) {
     if (moistureRead < 100) {
       digitalWrite(waterLED, HIGH);
       digitalWrite(waterSound, HIGH);
       delay(100);
-      Serial.println("Water this plant");  } 
+      // Serial.println("Water this plant");  
+  } 
+  // Reset for the next iteration,
   digitalWrite(waterSound, HIGH);    
   digitalWrite(waterLED, LOW);
 }
+
  ///////////////////////////////////////////////////////////////////////////////////////////////////////// LIGHTING  ///////////////////////////////////////////////////////////////////////////////////////////////
   int photoRead = analogRead(photoPin);
-   ///// DEBUG FUNCTIONS ////////
+  ////// DEBUG FUNCTIONS ////////
   // Serial.println("The photodiode reading is: ");
   // Serial.println(photoRead);
   if(photoRead < 150) {
     digitalWrite(lightLED, HIGH);
     digitalWrite(lightSound, HIGH);
-    Serial.println("Brighten this plant's day!");
+    delay(100);
+    // Serial.println("Brighten this plant's day!");
   }
   digitalWrite(lightSound, HIGH);    
   digitalWrite(lightLED, LOW);
-
- 
-
-
 }
 
