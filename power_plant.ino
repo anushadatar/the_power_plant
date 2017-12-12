@@ -3,44 +3,56 @@
 #include <Servo.h> 
 
 Servo motor;
-int servoPin = 9;
+int waterLED = 9;
 int soilPin = A0;
 int photoPin = A1;
+int waterSound = 5;
+int lightSound = 6;
+int lightLED = 10;
 int sensorMin = 0;
 int sensorMax = 0;
 void setup() {
   // initialize serial communication at 9600 bits per second:
-  motor.attach(servoPin);
-
+  pinMode(waterLED, OUTPUT);
+  pinMode(lightLED, OUTPUT);
+  pinMode(waterSound, OUTPUT);
+  pinMode(lightSound, OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
   // read the input on analog pin 0 to get the voltage from the soil moisture sensor.
   
- ///////////////////////////////////////////////////////////////////////////////////////////////////////// READ AND PRINT SOIL MOISTURE //////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////// SOIL MOISTURE //////////////////////////////////////////////////////////////////////////////////////////
  int moistureRead = analogRead(soilPin);
- Serial.println("The moisture sensor reading is: ");
- Serial.println(moistureRead);
- // Only take the lower values. Threshold is 100. Don't ask...
- if (moistureRead < 900) {
-  if (moistureRead < 100) {
-    Serial.println("Water this plant");  } }
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////// READ AND PRINT LIGHTING  ///////////////////////////////////////////////////////////////////////////////////////////////
+///// DEBUG FUNCTIONS ////////
+ //Serial.println("The moisture sensor reading is: ");
+ //Serial.println(moistureRead);
+ 
+ //Only take the valid values
+  if (moistureRead < 900) {
+    if (moistureRead < 100) {
+      digitalWrite(waterLED, HIGH);
+      digitalWrite(waterSound, HIGH);
+      delay(100);
+      Serial.println("Water this plant");  } 
+  digitalWrite(waterSound, HIGH);    
+  digitalWrite(waterLED, LOW);
+}
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////// LIGHTING  ///////////////////////////////////////////////////////////////////////////////////////////////
   int photoRead = analogRead(photoPin);
-  if(photoRead < 200) {
+   ///// DEBUG FUNCTIONS ////////
+  // Serial.println("The photodiode reading is: ");
+  // Serial.println(photoRead);
+  if(photoRead < 150) {
+    digitalWrite(lightLED, HIGH);
+    digitalWrite(lightSound, HIGH);
     Serial.println("Brighten this plant's day!");
   }
-  Serial.println("The photodiode reading is: ");
-  Serial.println(photoRead);
+  digitalWrite(lightSound, HIGH);    
+  digitalWrite(lightLED, LOW);
 
-  
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////// MOVE THE MOTRO /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  motor.write(90);
-  delay(1000);
-  motor.write(-90);
-  delay(1000);
+ 
 
 
 }
